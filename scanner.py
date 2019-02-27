@@ -5,6 +5,9 @@ This accepts a number with optional decimal part [0-9]+(\.[0-9]+)?
 NOTE: suitable for optional matches
 """
 
+
+
+
 def getchar(text,pos):
 	""" returns char category at position `pos` of `text`,
 	or None if out of bounds """
@@ -15,9 +18,9 @@ def getchar(text,pos):
 	
 	# **Σημείο #3**: Προαιρετικά, προσθέστε τις δικές σας ομαδοποιήσεις
 	
-	if c>='0' and c<='9': return 'DIGIT'	# 0..9 grouped together
+	#if c>='0' and c<='9': return 'DIGIT'	# 0..9 grouped together
 	
-	if c=='.': return 'DOT'	# dot as a category by itself
+	#if c=='.': return 'DOT'	# dot as a category by itself
 	
 	return c	# anything else
 	
@@ -58,18 +61,25 @@ def scan(text,transitions,accepts):
 			# else, no accepting state met yet
 			return 'ERROR_TOKEN',pos
 			
-	
-# **Σημείο #1**: Αντικαταστήστε με το δικό σας λεξικό μεταβάσεων
-transitions = { 's0': { 'DIGIT':'s1' },
-       			's1': { 'DIGIT':'s1','DOT':'s2' },
-       			's2': { 'DIGIT':'s3' },
-       			's3': { 'DIGIT':'s3' }       
-     		  } 
+# **Σημείο #1**: Αντικαταστήστε με το δικό σας λεξικό μεταβάσεων	
+transitions = {	'q0': {'1': 'q1', '2': 'q1', '3': 'q2'},
+						'q1': {'1': 'q5','2': 'q5','3': 'q5','4': 'q5','5': 'q5','6': 'q5','7': 'q5','8': 'q5','9': 'q5','0': 'q5'},
+						'q2': {'1': 'q3','2': 'q3','3': 'q3','4': 'q3','5': 'q4'},
+						'q3': {'1': 'q6','2': 'q6','3': 'q6','4': 'q6','5': 'q6','6': 'q6','7': 'q6','8': 'q6','9': 'q6','0': 'q6'},
+						'q4': {'0': 'q6'},
+						'q5': {'1': 'q6','2': 'q6','3': 'q6','4': 'q6','5': 'q6','6': 'q6','7': 'q6','8': 'q6','9': 'q6','0': 'q6'},
+						'q6': {'1': 'q7','2': 'q7','3': 'q7','4': 'q7','5': 'q7','6': 'q7','7': 'q7','8': 'q7','9': 'q7','0': 'q7'},
+						'q7': {'1': 'q8','2': 'q8','3': 'q8','4': 'q8','5': 'q8','6': 'q8','7': 'q8','8': 'q8','9': 'q8','0': 'q8'},
+						'q8': {'K': 'q9','M': 'q11'},
+						'q9': {'T': 'q10'},
+						'q11': {'P': 'q12'}	,	
+						'q12': {'S': 'q13'}
 
-# **Σημείο #2**: Αντικαταστήστε με το δικό σας λεξικό καταστάσεων αποδοχής
-accepts = { 's1':'INT_TOKEN',
-       		's3':'FLOAT_TOKEN'	
-     	  }
+					}
+# **Σημείο #2**: Αντικαταστήστε με το δικό σας λεξικό καταστάσεων αποδοχής# **Σημείο #2**: Αντικαταστήστε με το δικό σας λεξικό καταστάσεων αποδοχής
+accepts = {	'q13' : 'MPS_TOKEN',
+				'q10': 'KT_TOKEN'
+				}
 
 
 # get a string from input
